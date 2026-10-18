@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>JobMatch — Match History</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #07090f;
+            --panel: rgba(17, 20, 31, 0.82);
+            --border: rgba(255, 255, 255, 0.09);
+            --text: #f5f7ff;
+            --muted: #8f96aa;
+            --purple: #8b5cf6;
+            --blue: #3b82f6;
+        }
+
+        body {
+            min-height: 100vh;
+
+            background:
+                radial-gradient(
+                    circle at 15% 10%,
+                    rgba(139, 92, 246, 0.18),
+                    transparent 28%
+                ),
+                radial-gradient(
+                    circle at 85% 15%,
+                    rgba(59, 130, 246, 0.15),
+                    transparent 28%
+                ),
+                var(--bg);
+
+            color: var(--text);
+
+            font-family:
+                Inter,
+                ui-sans-serif,
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+        }
+
+
+        .container {
+            width: min(1100px, calc(100% - 40px));
+            margin: auto;
+            padding: 30px 0 80px;
+        }
+
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 14px 18px;
+
+            background: rgba(10, 12, 20, 0.72);
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 18px;
+
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+
+            position: sticky;
+            top: 18px;
+
+            z-index: 50;
+        }
+
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 12px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--purple),
+                    var(--blue)
+                );
+
+            font-weight: 900;
+
+            box-shadow:
+                0 0 30px rgba(139, 92, 246, 0.35);
+        }
+
+
+        .brand-text {
+            font-weight: 800;
+            font-size: 17px;
+        }
+
+
+        .brand-subtitle {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+
+        .nav-links {
+            display: flex;
+            gap: 8px;
+        }
+
+
+        .nav-links a {
+            color: var(--muted);
+
+            text-decoration: none;
+
+            padding: 9px 15px;
+
+            border-radius: 10px;
+
+            font-size: 13px;
+            font-weight: 600;
+
+            transition: 0.2s ease;
+        }
+
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: white;
+
+            background:
+                rgba(255,255,255,0.07);
+        }
+
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .hero {
+            padding: 70px 10px 40px;
+        }
+
+
+        .hero-badge {
+            display: inline-block;
+
+            padding: 7px 12px;
+
+            border-radius: 999px;
+
+            background:
+                rgba(139,92,246,0.08);
+
+            border:
+                1px solid rgba(139,92,246,0.25);
+
+            color: #c4b5fd;
+
+            font-size: 11px;
+            font-weight: 750;
+
+            margin-bottom: 18px;
+        }
+
+
+        .hero h1 {
+            font-size: clamp(38px, 6vw, 64px);
+
+            letter-spacing: -3px;
+
+            line-height: 1;
+        }
+
+
+        .gradient-text {
+            background:
+                linear-gradient(
+                    100deg,
+                    #ffffff,
+                    #a78bfa,
+                    #60a5fa
+                );
+
+            -webkit-background-clip: text;
+            background-clip: text;
+
+            color: transparent;
+        }
+
+
+        .hero p {
+            color: var(--muted);
+
+            max-width: 620px;
+
+            margin-top: 18px;
+
+            line-height: 1.7;
+
+            font-size: 14px;
+        }
+
+
+        /* =========================
+           HISTORY CARDS
+        ========================= */
+
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+
+        .history-card {
+
+            display: grid;
+
+            grid-template-columns:
+                1fr auto;
+
+            align-items: center;
+
+            gap: 25px;
+
+            padding: 22px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(20,24,38,0.88),
+                    rgba(10,12,20,0.92)
+                );
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 20px;
+
+            transition:
+                transform 0.2s ease,
+                border-color 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+
+        .history-card:hover {
+
+            transform: translateY(-3px);
+
+            border-color:
+                rgba(139,92,246,0.35);
+
+            box-shadow:
+                0 20px 50px rgba(0,0,0,0.25);
+        }
+
+
+        .analysis-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+
+        .analysis-icon {
+
+            width: 48px;
+            height: 48px;
+
+            flex-shrink: 0;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 14px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(139,92,246,0.2),
+                    rgba(59,130,246,0.12)
+                );
+
+            border:
+                1px solid rgba(139,92,246,0.15);
+
+            color: #c4b5fd;
+
+            font-weight: 900;
+        }
+
+
+        .analysis-title {
+            font-size: 15px;
+            font-weight: 800;
+
+            margin-bottom: 5px;
+        }
+
+
+        .analysis-date {
+            color: var(--muted);
+
+            font-size: 11px;
+        }
+
+
+        .stats {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+
+        .stat {
+            min-width: 90px;
+        }
+
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 850;
+
+            letter-spacing: -0.5px;
+        }
+
+
+        .stat-label {
+            color: var(--muted);
+
+            font-size: 10px;
+
+            margin-top: 3px;
+
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+        }
+
+
+        .match-value {
+            color: #c4b5fd;
+        }
+
+
+        .coverage-value {
+            color: #93c5fd;
+        }
+
+
+        .details-button {
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 10px 15px;
+
+            border-radius: 10px;
+
+            text-decoration: none;
+
+            color: white;
+
+            font-size: 12px;
+            font-weight: 700;
+
+            background:
+                rgba(255,255,255,0.06);
+
+            border:
+                1px solid rgba(255,255,255,0.08);
+
+            transition: 0.2s ease;
+        }
+
+
+        .details-button:hover {
+
+            background:
+                linear-gradient(
+                    100deg,
+                    #7c3aed,
+                    #2563eb
+                );
+
+            border-color: transparent;
+
+            transform: translateX(2px);
+        }
+
+
+        /* =========================
+           EMPTY STATE
+        ========================= */
+
+        .empty {
+
+            text-align: center;
+
+            padding: 80px 20px;
+
+            background:
+                rgba(17,20,31,0.75);
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 22px;
+        }
+
+
+        .empty-icon {
+
+            width: 64px;
+            height: 64px;
+
+            margin: 0 auto 18px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 18px;
+
+            background:
+                rgba(139,92,246,0.1);
+
+            color: #c4b5fd;
+
+            font-size: 25px;
+        }
+
+
+        .empty h2 {
+            margin-bottom: 8px;
+        }
+
+
+        .empty p {
+            color: var(--muted);
+
+            font-size: 13px;
+
+            margin-bottom: 22px;
+        }
+
+
+        .empty-button {
+
+            display: inline-block;
+
+            padding: 12px 18px;
+
+            border-radius: 11px;
+
+            background:
+                linear-gradient(
+                    100deg,
+                    #7c3aed,
+                    #2563eb
+                );
+
+            color: white;
+
+            text-decoration: none;
+
+            font-size: 13px;
+            font-weight: 750;
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        .footer {
+
+            text-align: center;
+
+            color: #555d72;
+
+            font-size: 11px;
+
+            padding-top: 45px;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 800px) {
+
+            .history-card {
+
+                grid-template-columns: 1fr;
+
+            }
+
+            .stats {
+
+                justify-content: space-between;
+
+                flex-wrap: wrap;
+
+            }
+
+            .details-button {
+
+                width: 100%;
+
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .container {
+
+                width:
+                    calc(100% - 24px);
+
+                padding-top: 12px;
+
+            }
+
+            .navbar {
+
+                position: relative;
+                top: 0;
+
+            }
+
+            .brand-subtitle {
+
+                display: none;
+
+            }
+
+            .hero {
+
+                padding:
+                    55px 5px 30px;
+
+            }
+
+            .hero h1 {
+
+                letter-spacing: -2px;
+
+            }
+
+            .analysis-info {
+
+                align-items: flex-start;
+
+            }
+
+            .stats {
+
+                gap: 15px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                J
+            </div>
+
+            <div>
+
+                <div class="brand-text">
+                    JobMatch
+                </div>
+
+                <div class="brand-subtitle">
+                    Resume Intelligence
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="nav-links">
+
+            <a href="/">
+                Analyzer
+            </a>
+
+            <a
+                href="/history"
+                class="active"
+            >
+                History
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- HEADER -->
+
+    <section class="hero">
+
+        <div class="hero-badge">
+            ANALYSIS ARCHIVE
+        </div>
+
+
+        <h1>
+
+            Your
+            <span class="gradient-text">
+                analysis history.
+            </span>
+
+        </h1>
+
+
+        <p>
+
+            Review previous resume-to-job comparisons,
+            track your match scores, and inspect the
+            skill gaps identified in each analysis.
+
+        </p>
+
+    </section>
+
+
+    <!-- HISTORY -->
+
+    {% if analyses %}
+
+    <div class="history-list">
+
+
+        {% for analysis in analyses %}
+
+
+        <div class="history-card">
+
+
+            <div class="analysis-info">
+
+
+                <div class="analysis-icon">
+
+                    #
+
+                </div>
+
+
+                <div>
+
+                    <div class="analysis-title">
+
+                        Analysis #{{ analysis.id }}
+
+                    </div>
+
+
+                    <div class="analysis-date">
+
+                        {{ analysis.created_at }}
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="stats">
+
+
+                <div class="stat">
+
+                    <div class="stat-value match-value">
+
+                        {{ analysis.match_percentage }}%
+
+                    </div>
+
+                    <div class="stat-label">
+
+                        Match Score
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat">
+
+                    <div class="stat-value coverage-value">
+
+                        {{ analysis.skill_coverage }}%
+
+                    </div>
+
+                    <div class="stat-label">
+
+                        Coverage
+
+                    </div>
+
+                </div>
+
+
+                <a
+                    href="/history/{{ analysis.id }}"
+                    class="details-button"
+                >
+
+                    View Details →
+
+                </a>
+
+
+            </div>
+
+
+        </div>
+
+
+        {% endfor %}
+
+
+    </div>
+
+
+    {% else %}
+
+
+    <div class="empty">
+
+        <div class="empty-icon">
+            ◈
+        </div>
+
+
+        <h2>
+            No analyses yet
+        </h2>
+
+
+        <p>
+
+            Run your first resume analysis and
+            your results will appear here.
+
+        </p>
+
+
+        <a
+            href="/"
+            class="empty-button"
+        >
+
+            Start an Analysis →
+
+        </a>
+
+    </div>
+
+
+    {% endif %}
+
+
+    <div class="footer">
+
+        JobMatch · Resume Intelligence Engine
+
+    </div>
+
+
+</div>
+
+
+</body>
+
+</html>

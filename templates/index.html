@@ -1,0 +1,2641 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>JobMatch — Technical Compatibility Analyzer</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #07090f;
+            --panel: rgba(17, 20, 31, 0.82);
+            --panel-2: rgba(12, 15, 24, 0.92);
+            --border: rgba(255,255,255,0.09);
+            --text: #f5f7ff;
+            --muted: #8f96aa;
+            --purple: #8b5cf6;
+            --blue: #3b82f6;
+            --green: #22c55e;
+            --red: #ef4444;
+            --yellow: #f59e0b;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+
+            background:
+                radial-gradient(
+                    circle at 10% 5%,
+                    rgba(139,92,246,0.18),
+                    transparent 28%
+                ),
+                radial-gradient(
+                    circle at 90% 10%,
+                    rgba(59,130,246,0.15),
+                    transparent 28%
+                ),
+                radial-gradient(
+                    circle at 50% 100%,
+                    rgba(6,182,212,0.06),
+                    transparent 35%
+                ),
+                var(--bg);
+
+            color: var(--text);
+
+            font-family:
+                Inter,
+                ui-sans-serif,
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+            overflow-x: hidden;
+        }
+
+        /* =====================================================
+           CONTAINER
+        ===================================================== */
+
+        .container {
+            width: min(1180px, calc(100% - 40px));
+            margin: 0 auto;
+            padding: 18px 0 80px;
+        }
+
+        /* =====================================================
+           NAVBAR
+        ===================================================== */
+
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 13px 18px;
+
+            background:
+                rgba(8,10,17,0.76);
+
+            border: 1px solid var(--border);
+            border-radius: 18px;
+
+            backdrop-filter: blur(20px);
+
+            position: sticky;
+            top: 14px;
+            z-index: 100;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 12px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--purple),
+                    var(--blue)
+                );
+
+            font-size: 17px;
+            font-weight: 900;
+
+            box-shadow:
+                0 8px 25px rgba(79,70,229,0.25);
+        }
+
+        .brand-text {
+            font-size: 17px;
+            font-weight: 850;
+        }
+
+        .brand-subtitle {
+            color: var(--muted);
+            font-size: 11px;
+            margin-top: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 7px;
+        }
+
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
+
+            padding: 9px 15px;
+
+            border-radius: 10px;
+
+            font-size: 13px;
+            font-weight: 650;
+
+            transition: 0.2s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: white;
+            background: rgba(255,255,255,0.07);
+        }
+
+        /* =====================================================
+           HERO
+        ===================================================== */
+
+        .hero {
+            text-align: center;
+            padding: 72px 20px 48px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+            padding: 8px 14px;
+
+            border-radius: 999px;
+
+            border:
+                1px solid rgba(139,92,246,0.28);
+
+            background:
+                rgba(139,92,246,0.08);
+
+            color: #c4b5fd;
+
+            font-size: 12px;
+            font-weight: 750;
+
+            margin-bottom: 21px;
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: #22c55e;
+
+            box-shadow:
+                0 0 12px #22c55e;
+        }
+
+        .hero h1 {
+            max-width: 900px;
+            margin: auto;
+
+            font-size:
+                clamp(42px, 7vw, 76px);
+
+            line-height: 0.98;
+            letter-spacing: -4px;
+
+            font-weight: 900;
+        }
+
+        .gradient-text {
+            background:
+                linear-gradient(
+                    100deg,
+                    #ffffff 10%,
+                    #a78bfa 45%,
+                    #60a5fa 80%
+                );
+
+            -webkit-background-clip: text;
+            background-clip: text;
+
+            color: transparent;
+        }
+
+        .hero p {
+            max-width: 720px;
+            margin: 24px auto 0;
+
+            color: var(--muted);
+
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        /* =====================================================
+           ERROR
+        ===================================================== */
+
+        .error {
+            padding: 18px 20px;
+            margin-bottom: 22px;
+
+            border-radius: 15px;
+
+            background:
+                rgba(239,68,68,0.08);
+
+            border:
+                1px solid rgba(239,68,68,0.27);
+
+            color: #fca5a5;
+
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .error strong {
+            display: block;
+            color: #ffaaa7;
+            margin-bottom: 3px;
+            font-size: 14px;
+        }
+
+        /* =====================================================
+           ROLE SELECTOR
+        ===================================================== */
+
+        .role-selector {
+            margin-bottom: 22px;
+
+            padding: 25px;
+
+            border-radius: 22px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(139,92,246,0.10),
+                    rgba(59,130,246,0.05)
+                );
+
+            border:
+                1px solid rgba(139,92,246,0.23);
+
+            box-shadow:
+                0 25px 70px rgba(0,0,0,0.20);
+        }
+
+        .role-header {
+            margin-bottom: 20px;
+        }
+
+        .role-header h2 {
+            font-size: 19px;
+            margin-bottom: 6px;
+        }
+
+        .role-header p {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .role-list {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0,1fr));
+
+            gap: 12px;
+        }
+
+        .role-option {
+            position: relative;
+        }
+
+        .role-option input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .role-option label {
+            display: block;
+
+            padding: 17px;
+
+            border-radius: 14px;
+
+            background:
+                rgba(255,255,255,0.035);
+
+            border:
+                1px solid rgba(255,255,255,0.08);
+
+            cursor: pointer;
+
+            font-size: 13px;
+            font-weight: 750;
+
+            transition: 0.2s ease;
+        }
+
+        .role-option label:hover {
+            border-color:
+                rgba(139,92,246,0.45);
+
+            background:
+                rgba(139,92,246,0.07);
+
+            transform: translateY(-1px);
+        }
+
+        .role-option input:checked + label {
+            border-color: var(--purple);
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(139,92,246,0.16),
+                    rgba(59,130,246,0.10)
+                );
+
+            box-shadow:
+                0 0 0 1px rgba(139,92,246,0.12),
+                0 12px 35px rgba(79,70,229,0.12);
+        }
+
+        .role-submit {
+            width: 100%;
+
+            margin-top: 15px;
+
+            padding: 14px;
+
+            border: none;
+            border-radius: 12px;
+
+            color: white;
+
+            font-size: 14px;
+            font-weight: 800;
+
+            cursor: pointer;
+
+            background:
+                linear-gradient(
+                    100deg,
+                    #7c3aed,
+                    #4f46e5,
+                    #2563eb
+                );
+
+            box-shadow:
+                0 12px 30px rgba(79,70,229,0.22);
+
+            transition: 0.2s ease;
+        }
+
+        .role-submit:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 17px 38px rgba(79,70,229,0.32);
+        }
+
+        .selected-role {
+            display: inline-flex;
+
+            margin-top: 13px;
+
+            padding: 6px 10px;
+
+            border-radius: 999px;
+
+            color: #86efac;
+
+            background:
+                rgba(34,197,94,0.08);
+
+            border:
+                1px solid rgba(34,197,94,0.18);
+
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        /* =====================================================
+           ANALYZER
+        ===================================================== */
+
+        .analyzer {
+            padding: 27px;
+
+            border-radius: 25px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(20,24,38,0.88),
+                    rgba(10,12,20,0.93)
+                );
+
+            border:
+                1px solid var(--border);
+
+            box-shadow:
+                0 40px 100px rgba(0,0,0,0.30);
+
+            backdrop-filter: blur(25px);
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            margin-bottom: 21px;
+        }
+
+        .section-heading h2 {
+            font-size: 18px;
+        }
+
+        .section-heading span {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .input-grid {
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 19px;
+        }
+
+        .input-card {
+            padding: 20px;
+
+            border-radius: 18px;
+
+            background:
+                rgba(255,255,255,0.025);
+
+            border:
+                1px solid var(--border);
+
+            transition: 0.25s ease;
+        }
+
+        .input-card:hover {
+            border-color:
+                rgba(139,92,246,0.32);
+
+            transform: translateY(-2px);
+        }
+
+        .input-label {
+            display: flex;
+            align-items: center;
+
+            gap: 10px;
+
+            margin-bottom: 15px;
+
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .label-icon {
+            width: 32px;
+            height: 32px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 9px;
+
+            background:
+                rgba(139,92,246,0.12);
+
+            color: #c4b5fd;
+        }
+
+        input[type="file"] {
+            width: 100%;
+
+            padding: 12px;
+
+            border:
+                1px dashed rgba(255,255,255,0.18);
+
+            border-radius: 12px;
+
+            background:
+                rgba(255,255,255,0.025);
+
+            color: var(--muted);
+
+            cursor: pointer;
+        }
+
+        input[type="file"]::file-selector-button {
+            border: none;
+
+            padding: 8px 12px;
+
+            border-radius: 8px;
+
+            background:
+                rgba(139,92,246,0.15);
+
+            color: #c4b5fd;
+
+            cursor: pointer;
+
+            margin-right: 10px;
+        }
+
+        .or-divider {
+            display: flex;
+            align-items: center;
+
+            gap: 10px;
+
+            margin: 15px 0;
+
+            color: #555d72;
+
+            font-size: 10px;
+
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .or-divider::before,
+        .or-divider::after {
+            content: "";
+
+            height: 1px;
+
+            flex: 1;
+
+            background:
+                var(--border);
+        }
+
+        textarea {
+            width: 100%;
+
+            min-height: 270px;
+
+            padding: 15px;
+
+            resize: vertical;
+
+            border:
+                1px solid rgba(255,255,255,0.08);
+
+            border-radius: 12px;
+
+            background:
+                rgba(3,5,10,0.65);
+
+            color: var(--text);
+
+            font-family: inherit;
+            font-size: 13px;
+
+            outline: none;
+        }
+
+        textarea::placeholder {
+            color: #555d72;
+        }
+
+        textarea:focus {
+            border-color:
+                rgba(139,92,246,0.55);
+
+            box-shadow:
+                0 0 0 3px
+                rgba(139,92,246,0.08);
+        }
+
+        .analyze-button {
+            width: 100%;
+
+            margin-top: 21px;
+
+            padding: 16px;
+
+            border: none;
+            border-radius: 14px;
+
+            color: white;
+
+            font-size: 15px;
+            font-weight: 850;
+
+            cursor: pointer;
+
+            background:
+                linear-gradient(
+                    100deg,
+                    #7c3aed,
+                    #4f46e5,
+                    #2563eb
+                );
+
+            box-shadow:
+                0 15px 35px rgba(79,70,229,0.25);
+
+            transition: 0.2s ease;
+        }
+
+        .analyze-button:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 20px 45px rgba(79,70,229,0.38);
+        }
+
+        /* =====================================================
+           RESULTS
+        ===================================================== */
+
+        .results {
+            margin-top: 35px;
+        }
+
+        .result-header {
+            margin-bottom: 18px;
+        }
+
+        .result-header h2 {
+            font-size: 27px;
+            letter-spacing: -0.8px;
+        }
+
+        .result-header p {
+            margin-top: 5px;
+
+            color: var(--muted);
+
+            font-size: 13px;
+        }
+
+        .role-result-badge {
+            display: inline-flex;
+
+            margin-top: 9px;
+
+            padding: 7px 10px;
+
+            border-radius: 999px;
+
+            background:
+                rgba(139,92,246,0.09);
+
+            border:
+                1px solid rgba(139,92,246,0.20);
+
+            color: #c4b5fd;
+
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        /* =====================================================
+           SCORE CARD
+        ===================================================== */
+
+        .score-card {
+            display: grid;
+
+            grid-template-columns:
+                260px 1fr;
+
+            gap: 30px;
+
+            padding: 30px;
+
+            border-radius: 24px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(139,92,246,0.13),
+                    rgba(59,130,246,0.06)
+                );
+
+            border:
+                1px solid rgba(139,92,246,0.18);
+        }
+
+        .score-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .score-ring {
+            --score: {{ result.match_percentage }}%;
+
+            width: 190px;
+            height: 190px;
+
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background:
+                conic-gradient(
+                    from -90deg,
+                    #8b5cf6 0%,
+                    #3b82f6 var(--score),
+                    rgba(255,255,255,0.06) var(--score),
+                    rgba(255,255,255,0.06) 100%
+                );
+
+            box-shadow:
+                0 0 60px rgba(139,92,246,0.18);
+
+            position: relative;
+        }
+
+        .score-ring::before {
+            content: "";
+
+            position: absolute;
+
+            width: 150px;
+            height: 150px;
+
+            border-radius: 50%;
+
+            background:
+                #0c0f18;
+        }
+
+        .score-content {
+            position: relative;
+            text-align: center;
+        }
+
+        .score-number {
+            font-size: 38px;
+            font-weight: 900;
+            letter-spacing: -1px;
+        }
+
+        .score-caption {
+            color: var(--muted);
+            font-size: 10px;
+            margin-top: 2px;
+        }
+
+        .score-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .score-info h3 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .score-description {
+            color: var(--muted);
+
+            line-height: 1.6;
+
+            font-size: 13px;
+        }
+
+        .metric-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4,1fr);
+
+            gap: 10px;
+
+            margin-top: 19px;
+        }
+
+        .metric {
+            padding: 14px;
+
+            border-radius: 13px;
+
+            background:
+                rgba(255,255,255,0.045);
+
+            border:
+                1px solid rgba(255,255,255,0.06);
+        }
+
+        .metric-value {
+            font-size: 20px;
+            font-weight: 850;
+        }
+
+        .metric-label {
+            color: var(--muted);
+
+            font-size: 10px;
+
+            margin-top: 4px;
+        }
+
+        /* =====================================================
+           SCORE INTERPRETATION
+        ===================================================== */
+
+        .score-message {
+            margin-top: 15px;
+
+            padding: 12px 14px;
+
+            border-radius: 12px;
+
+            background:
+                rgba(255,255,255,0.035);
+
+            border:
+                1px solid rgba(255,255,255,0.06);
+
+            color: #c8cede;
+
+            font-size: 12px;
+            line-height: 1.55;
+        }
+
+        /* =====================================================
+           THREE COLUMN SUMMARY
+        ===================================================== */
+
+        .summary-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3,1fr);
+
+            gap: 15px;
+
+            margin-top: 18px;
+        }
+
+        .summary-card {
+            padding: 20px;
+
+            border-radius: 18px;
+
+            background:
+                rgba(17,20,31,0.82);
+
+            border:
+                1px solid var(--border);
+        }
+
+        .summary-card-title {
+            color: var(--muted);
+
+            font-size: 11px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.7px;
+
+            margin-bottom: 10px;
+        }
+
+        .summary-card-number {
+            font-size: 29px;
+            font-weight: 900;
+        }
+
+        .summary-card-text {
+            color: var(--muted);
+
+            font-size: 11px;
+
+            margin-top: 5px;
+        }
+
+        /* =====================================================
+           RESULT GRID
+        ===================================================== */
+
+        .result-grid {
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 18px;
+
+            margin-top: 18px;
+        }
+
+        .result-card {
+            padding: 24px;
+
+            border-radius: 20px;
+
+            background:
+                rgba(17,20,31,0.82);
+
+            border:
+                1px solid var(--border);
+        }
+
+        .result-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            margin-bottom: 18px;
+        }
+
+        .result-card-title {
+            font-weight: 850;
+            font-size: 15px;
+        }
+
+        .result-card-count {
+            padding: 5px 9px;
+
+            border-radius: 999px;
+
+            background:
+                rgba(255,255,255,0.06);
+
+            color: var(--muted);
+
+            font-size: 10px;
+        }
+
+        .skill-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .skill-chip {
+            padding: 8px 11px;
+
+            border-radius: 9px;
+
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .skill-chip.matched {
+            background:
+                rgba(34,197,94,0.09);
+
+            border:
+                1px solid rgba(34,197,94,0.20);
+
+            color: #86efac;
+        }
+
+        .skill-chip.partial {
+            background:
+                rgba(245,158,11,0.09);
+
+            border:
+                1px solid rgba(245,158,11,0.20);
+
+            color: #fcd34d;
+        }
+
+        .skill-chip.missing {
+            background:
+                rgba(239,68,68,0.08);
+
+            border:
+                1px solid rgba(239,68,68,0.18);
+
+            color: #fca5a5;
+        }
+
+        .empty-state {
+            color: var(--muted);
+
+            font-size: 12px;
+
+            padding: 4px 0;
+        }
+
+        /* =====================================================
+           SKILLS TO LEARN
+        ===================================================== */
+
+        .learning-card {
+            margin-top: 18px;
+
+            padding: 24px;
+
+            border-radius: 20px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(245,158,11,0.07),
+                    rgba(139,92,246,0.05)
+                );
+
+            border:
+                1px solid rgba(245,158,11,0.14);
+        }
+
+        .learning-header {
+            margin-bottom: 18px;
+        }
+
+        .learning-header h3 {
+            font-size: 17px;
+        }
+
+        .learning-header p {
+            color: var(--muted);
+
+            font-size: 12px;
+
+            margin-top: 5px;
+        }
+
+        .learning-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3,1fr);
+
+            gap: 11px;
+        }
+
+        .learning-item {
+            padding: 15px;
+
+            border-radius: 13px;
+
+            background:
+                rgba(255,255,255,0.035);
+
+            border:
+                1px solid rgba(255,255,255,0.06);
+        }
+
+        .learning-name {
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .learning-category {
+            color: var(--muted);
+
+            font-size: 10px;
+
+            margin-top: 4px;
+        }
+
+        .priority {
+            display: inline-block;
+
+            margin-top: 9px;
+
+            padding: 4px 8px;
+
+            border-radius: 999px;
+
+            font-size: 9px;
+
+            font-weight: 850;
+        }
+
+        .priority.High {
+            color: #fca5a5;
+
+            background:
+                rgba(239,68,68,0.10);
+        }
+
+        .priority.Medium {
+            color: #fcd34d;
+
+            background:
+                rgba(245,158,11,0.10);
+        }
+
+        /* =====================================================
+           LEARNED SKILLS
+        ===================================================== */
+
+        .learned-card {
+            margin-top: 18px;
+
+            padding: 24px;
+
+            border-radius: 20px;
+
+            background:
+                rgba(17,20,31,0.82);
+
+            border:
+                1px solid var(--border);
+        }
+
+        .learned-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3,1fr);
+
+            gap: 10px;
+        }
+
+        .learned-item {
+            padding: 13px 14px;
+
+            border-radius: 12px;
+
+            background:
+                rgba(34,197,94,0.035);
+
+            border:
+                1px solid rgba(34,197,94,0.10);
+        }
+
+        .learned-name {
+            font-size: 12px;
+            font-weight: 800;
+
+            color: #dcfce7;
+        }
+
+        .learned-level {
+            display: inline-block;
+
+            margin-top: 6px;
+
+            padding: 3px 7px;
+
+            border-radius: 999px;
+
+            background:
+                rgba(34,197,94,0.09);
+
+            color: #86efac;
+
+            font-size: 9px;
+            font-weight: 750;
+        }
+
+        /* =====================================================
+           PROJECT ALIGNMENT
+        ===================================================== */
+
+        .project-card {
+            margin-top: 18px;
+
+            padding: 24px;
+
+            border-radius: 20px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(59,130,246,0.07),
+                    rgba(139,92,246,0.05)
+                );
+
+            border:
+                1px solid rgba(59,130,246,0.13);
+        }
+
+        .project-card h3 {
+            font-size: 17px;
+            margin-bottom: 5px;
+        }
+
+        .project-card > p {
+            color: var(--muted);
+
+            font-size: 12px;
+
+            margin-bottom: 17px;
+        }
+
+        .project-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3,1fr);
+
+            gap: 10px;
+        }
+
+        .project-item {
+            padding: 14px;
+
+            border-radius: 12px;
+
+            background:
+                rgba(255,255,255,0.035);
+
+            border:
+                1px solid rgba(255,255,255,0.06);
+        }
+
+        .project-skill {
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .project-evidence {
+            color: var(--muted);
+
+            font-size: 10px;
+
+            line-height: 1.45;
+
+            margin-top: 5px;
+        }
+
+        /* =====================================================
+           REQUIREMENT DETAILS
+        ===================================================== */
+
+        .details-card {
+            margin-top: 18px;
+
+            padding: 24px;
+
+            border-radius: 20px;
+
+            background:
+                rgba(17,20,31,0.82);
+
+            border:
+                1px solid var(--border);
+        }
+
+        .details-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            margin-bottom: 18px;
+        }
+
+        .details-card-header h3 {
+            font-size: 17px;
+        }
+
+        .details-card-header span {
+            color: var(--muted);
+
+            font-size: 11px;
+        }
+
+        .requirement-list {
+            display: flex;
+            flex-direction: column;
+
+            gap: 8px;
+        }
+
+        .requirement {
+            display: grid;
+
+            grid-template-columns:
+                minmax(160px,1.1fr)
+                100px
+                100px
+                minmax(180px,2fr);
+
+            gap: 15px;
+
+            align-items: center;
+
+            padding: 13px 14px;
+
+            border-radius: 11px;
+
+            background:
+                rgba(255,255,255,0.03);
+
+            border:
+                1px solid rgba(255,255,255,0.05);
+        }
+
+        .requirement-name {
+            font-size: 12px;
+            font-weight: 750;
+        }
+
+        .requirement-category {
+            color: var(--muted);
+
+            font-size: 10px;
+        }
+
+        .requirement-tier {
+            font-size: 10px;
+
+            font-weight: 750;
+        }
+
+        .tier-core {
+            color: #c4b5fd;
+        }
+
+        .tier-supporting {
+            color: #94a3b8;
+        }
+
+        .evidence {
+            color: var(--muted);
+
+            font-size: 10px;
+
+            line-height: 1.4;
+        }
+
+        .match-badge {
+            display: inline-flex;
+
+            width: fit-content;
+
+            padding: 4px 7px;
+
+            border-radius: 999px;
+
+            font-size: 9px;
+
+            font-weight: 850;
+        }
+
+        .match-strong {
+            color: #86efac;
+
+            background:
+                rgba(34,197,94,0.09);
+        }
+
+        .match-demonstrated {
+            color: #86efac;
+
+            background:
+                rgba(34,197,94,0.07);
+        }
+
+        .match-related {
+            color: #fcd34d;
+
+            background:
+                rgba(245,158,11,0.08);
+        }
+
+        .match-mentioned {
+            color: #c4b5fd;
+
+            background:
+                rgba(139,92,246,0.08);
+        }
+
+        .match-missing {
+            color: #fca5a5;
+
+            background:
+                rgba(239,68,68,0.08);
+        }
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        .footer {
+            text-align: center;
+
+            color: #555d72;
+
+            font-size: 11px;
+
+            padding-top: 45px;
+        }
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 900px) {
+
+            .input-grid,
+            .result-grid,
+            .score-card {
+                grid-template-columns: 1fr;
+            }
+
+            .summary-grid,
+            .learning-grid,
+            .learned-grid,
+            .project-grid {
+                grid-template-columns:
+                    repeat(2,1fr);
+            }
+
+            .metric-grid {
+                grid-template-columns:
+                    repeat(2,1fr);
+            }
+
+            .requirement {
+                grid-template-columns:
+                    1fr 1fr;
+            }
+        }
+
+        @media (max-width: 650px) {
+
+            .container {
+                width: calc(100% - 24px);
+                padding-top: 10px;
+            }
+
+            .navbar {
+                position: relative;
+                top: 0;
+            }
+
+            .brand-subtitle {
+                display: none;
+            }
+
+            .hero {
+                padding:
+                    55px 8px 35px;
+            }
+
+            .hero h1 {
+                letter-spacing: -2px;
+            }
+
+            .role-list {
+                grid-template-columns: 1fr;
+            }
+
+            .summary-grid,
+            .learning-grid,
+            .learned-grid,
+            .project-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .metric-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .requirement {
+                grid-template-columns: 1fr;
+                gap: 6px;
+            }
+
+            .analyzer {
+                padding: 18px;
+            }
+
+            .score-card {
+                padding: 20px;
+            }
+
+            .score-ring {
+                width: 170px;
+                height: 170px;
+            }
+
+            .score-ring::before {
+                width: 135px;
+                height: 135px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+
+    <!-- =====================================================
+         NAVBAR
+    ====================================================== -->
+
+    <nav class="navbar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                J
+            </div>
+
+            <div>
+
+                <div class="brand-text">
+                    JobMatch
+                </div>
+
+                <div class="brand-subtitle">
+                    Technical Compatibility Engine
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="nav-links">
+
+            <a
+                href="/"
+                class="active"
+            >
+                Analyzer
+            </a>
+
+            <a href="/history">
+                History
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+    <section class="hero">
+
+        <div class="hero-badge">
+
+            <span class="status-dot"></span>
+
+            Technical Compatibility Engine
+
+        </div>
+
+
+        <h1>
+
+            Match your resume
+
+            <span class="gradient-text">
+                against the job.
+            </span>
+
+        </h1>
+
+
+        <p>
+
+            JobMatch analyzes the technical requirements
+            of a job description against the skills,
+            projects and technical experience demonstrated
+            in your resume.
+
+        </p>
+
+    </section>
+
+
+    <!-- =====================================================
+         ERROR
+    ====================================================== -->
+
+    {% if error %}
+
+    <div class="error">
+
+        <strong>
+            Analysis Error
+        </strong>
+
+        {{ error }}
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         MULTI ROLE SELECTOR
+    ====================================================== -->
+
+    {% if roles and roles|length > 1 %}
+
+    <section class="role-selector">
+
+        <div class="role-header">
+
+            <h2>
+                Multiple roles detected
+            </h2>
+
+            <p>
+
+                This job description contains
+                {{ roles|length }}
+                roles. Select the specific technical role
+                you want JobMatch to evaluate.
+
+            </p>
+
+        </div>
+
+
+        <form method="POST">
+
+            <div class="role-list">
+
+                {% for role in roles %}
+
+                <div class="role-option">
+
+                    <input
+                        type="radio"
+                        id="role_{{ loop.index }}"
+                        name="selected_role"
+                        value="{{ role.title }}"
+                        {% if selected_role == role.title %}
+                        checked
+                        {% endif %}
+                        required
+                    >
+
+                    <label for="role_{{ loop.index }}">
+
+                        {{ role.title }}
+
+                    </label>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="role-submit"
+            >
+
+                Analyze Selected Role →
+
+            </button>
+
+        </form>
+
+
+        {% if selected_role %}
+
+        <div class="selected-role">
+
+            ✓ Selected:
+            {{ selected_role }}
+
+        </div>
+
+        {% endif %}
+
+    </section>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         ANALYZER
+    ====================================================== -->
+
+    <section class="analyzer">
+
+        <div class="section-heading">
+
+            <h2>
+                Start a new analysis
+            </h2>
+
+            <span>
+                PDF + Text supported
+            </span>
+
+        </div>
+
+
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+        >
+
+
+            <div class="input-grid">
+
+
+                <!-- RESUME -->
+
+                <div class="input-card">
+
+                    <div class="input-label">
+
+                        <div class="label-icon">
+                            ↗
+                        </div>
+
+                        Your Resume
+
+                    </div>
+
+
+                    <input
+                        type="file"
+                        id="resume_file"
+                        name="resume_file"
+                        accept=".pdf"
+                    >
+
+
+                    <div class="or-divider">
+                        or paste text
+                    </div>
+
+
+                    <textarea
+                        id="resume"
+                        name="resume"
+                        placeholder="Paste your resume content here..."
+                    ></textarea>
+
+                </div>
+
+
+                <!-- JD -->
+
+                <div class="input-card">
+
+                    <div class="input-label">
+
+                        <div class="label-icon">
+                            ◈
+                        </div>
+
+                        Job Description
+
+                    </div>
+
+
+                    <input
+                        type="file"
+                        id="job_file"
+                        name="job_file"
+                        accept=".pdf"
+                    >
+
+
+                    <div class="or-divider">
+                        or paste text
+                    </div>
+
+
+                    <textarea
+                        id="job_description"
+                        name="job_description"
+                        placeholder="Paste the job description here..."
+                    ></textarea>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="analyze-button"
+            >
+
+                Analyze Resume →
+
+            </button>
+
+        </form>
+
+    </section>
+
+
+    <!-- =====================================================
+         RESULTS
+    ====================================================== -->
+
+    {% if result %}
+
+    <section class="results">
+
+
+        <!-- RESULT HEADER -->
+
+        <div class="result-header">
+
+            <h2>
+                Analysis complete
+            </h2>
+
+
+            <p>
+
+                Technical compatibility based on
+                skills, projects and demonstrated
+                technical experience.
+
+            </p>
+
+
+            {% if selected_role %}
+
+            <div class="role-result-badge">
+
+                Role:
+                {{ selected_role }}
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- =================================================
+             MAIN SCORE
+        ================================================== -->
+
+        <div class="score-card">
+
+
+            <div class="score-container">
+
+                <div
+                    class="score-ring"
+                    style="
+                        --score:
+                        {{ result.match_percentage }}%;
+                    "
+                >
+
+                    <div class="score-content">
+
+                        <div class="score-number">
+
+                            {{ result.match_percentage }}%
+
+                        </div>
+
+                        <div class="score-caption">
+
+                            TECHNICAL MATCH
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="score-info">
+
+                <h3>
+                    Resume compatibility
+                </h3>
+
+
+                <p class="score-description">
+
+                    The score emphasizes core technical
+                    requirements and gives stronger credit
+                    when your resume demonstrates a skill
+                    through projects or technical experience.
+
+                </p>
+
+
+                <div class="metric-grid">
+
+
+                    <div class="metric">
+
+                        <div class="metric-value">
+
+                            {{ result.skill_coverage }}%
+
+                        </div>
+
+                        <div class="metric-label">
+
+                            Technical Coverage
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="metric">
+
+                        <div class="metric-value">
+
+                            {{ result.core_score }}%
+
+                        </div>
+
+                        <div class="metric-label">
+
+                            Core Match
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="metric">
+
+                        <div class="metric-value">
+
+                            {{ result.supporting_score }}%
+
+                        </div>
+
+                        <div class="metric-label">
+
+                            Supporting Match
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="metric">
+
+                        <div class="metric-value">
+
+                            {{ result.matched_weight }}
+
+                        </div>
+
+                        <div class="metric-label">
+
+                            Weighted Match
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SCORE INTERPRETATION -->
+
+                <div class="score-message">
+
+                    {% if result.match_percentage >= 80 %}
+
+                        Strong technical alignment.
+                        Your resume demonstrates most of
+                        the important technical requirements.
+
+                    {% elif result.match_percentage >= 65 %}
+
+                        Good technical alignment.
+                        You have a solid base, but some
+                        requirements should be strengthened.
+
+                    {% elif result.match_percentage >= 50 %}
+
+                        Moderate technical alignment.
+                        Several relevant skills are present,
+                        but important requirements are still missing.
+
+                    {% elif result.match_percentage >= 35 %}
+
+                        Partial technical alignment.
+                        Your background overlaps with the role,
+                        but significant technical gaps remain.
+
+                    {% else %}
+
+                        Low technical alignment.
+                        The role requires several technical
+                        skills that are not currently demonstrated.
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             SUMMARY
+        ================================================== -->
+
+        <div class="summary-grid">
+
+
+            <div class="summary-card">
+
+                <div class="summary-card-title">
+                    Strong Matches
+                </div>
+
+                <div class="summary-card-number">
+                    {{ result.matched_skills|length }}
+                </div>
+
+                <div class="summary-card-text">
+                    Skills strongly demonstrated
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-card-title">
+                    Partial Matches
+                </div>
+
+                <div class="summary-card-number">
+                    {{ result.partial_skills|length }}
+                </div>
+
+                <div class="summary-card-text">
+                    Related technical evidence
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-card-title">
+                    Missing Skills
+                </div>
+
+                <div class="summary-card-number">
+                    {{ result.missing_skills|length }}
+                </div>
+
+                <div class="summary-card-text">
+                    Technical requirements not demonstrated
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             MATCHED / PARTIAL
+        ================================================== -->
+
+        <div class="result-grid">
+
+
+            <!-- MATCHED -->
+
+            <div class="result-card">
+
+                <div class="result-card-header">
+
+                    <div class="result-card-title">
+                        ✓ Strong Technical Matches
+                    </div>
+
+                    <div class="result-card-count">
+                        {{ result.matched_skills|length }}
+                    </div>
+
+                </div>
+
+
+                {% if result.matched_skills %}
+
+                <div class="skill-list">
+
+                    {% for skill in result.matched_skills %}
+
+                    <span class="skill-chip matched">
+
+                        ✓ {{ skill }}
+
+                    </span>
+
+                    {% endfor %}
+
+                </div>
+
+                {% else %}
+
+                <div class="empty-state">
+
+                    No strong technical matches found.
+
+                </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- PARTIAL -->
+
+            <div class="result-card">
+
+                <div class="result-card-header">
+
+                    <div class="result-card-title">
+                        ◐ Partial / Related Matches
+                    </div>
+
+                    <div class="result-card-count">
+                        {{ result.partial_skills|length }}
+                    </div>
+
+                </div>
+
+
+                {% if result.partial_skills %}
+
+                <div class="skill-list">
+
+                    {% for skill in result.partial_skills %}
+
+                    <span class="skill-chip partial">
+
+                        ◐ {{ skill }}
+
+                    </span>
+
+                    {% endfor %}
+
+                </div>
+
+                {% else %}
+
+                <div class="empty-state">
+
+                    No partial technical matches found.
+
+                </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             MISSING
+        ================================================== -->
+
+        <div class="result-card" style="margin-top:18px;">
+
+            <div class="result-card-header">
+
+                <div class="result-card-title">
+
+                    ! Missing Technical Skills
+
+                </div>
+
+                <div class="result-card-count">
+
+                    {{ result.missing_skills|length }}
+
+                </div>
+
+            </div>
+
+
+            {% if result.missing_skills %}
+
+            <div class="skill-list">
+
+                {% for skill in result.missing_skills %}
+
+                <span class="skill-chip missing">
+
+                    + {{ skill }}
+
+                </span>
+
+                {% endfor %}
+
+            </div>
+
+            {% else %}
+
+            <div class="empty-state">
+
+                No significant technical skill gaps detected.
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- =================================================
+             SKILLS TO LEARN
+        ================================================== -->
+
+        <div class="learning-card">
+
+            <div class="learning-header">
+
+                <h3>
+                    Skills to learn
+                </h3>
+
+                <p>
+
+                    Prioritized technical skills that would
+                    improve your compatibility with this role.
+
+                </p>
+
+            </div>
+
+
+            {% if result.skills_to_learn %}
+
+            <div class="learning-grid">
+
+
+                {% for item in result.skills_to_learn %}
+
+                <div class="learning-item">
+
+                    <div class="learning-name">
+
+                        {{ item.skill }}
+
+                    </div>
+
+                    <div class="learning-category">
+
+                        {{ item.category }}
+
+                    </div>
+
+                    <span
+                        class="priority {{ item.priority }}"
+                    >
+
+                        {{ item.priority }}
+
+                    </span>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+            {% else %}
+
+            <div class="empty-state">
+
+                No additional technical skills are currently
+                required based on the detected requirements.
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- =================================================
+             ALREADY LEARNED
+        ================================================== -->
+
+        <div class="learned-card">
+
+            <div class="result-card-header">
+
+                <div class="result-card-title">
+
+                    ✓ Technical skills already demonstrated
+
+                </div>
+
+                <div class="result-card-count">
+
+                    {{ result.learned_skills|length }}
+
+                </div>
+
+            </div>
+
+
+            {% if result.learned_skills %}
+
+            <div class="learned-grid">
+
+
+                {% for item in result.learned_skills %}
+
+                <div class="learned-item">
+
+                    <div class="learned-name">
+
+                        {{ item.skill }}
+
+                    </div>
+
+                    <span class="learned-level">
+
+                        {{ item.level }}
+
+                    </span>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+            {% else %}
+
+            <div class="empty-state">
+
+                No matching demonstrated technical skills
+                were identified.
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- =================================================
+             PROJECT ALIGNMENT
+        ================================================== -->
+
+        <div class="project-card">
+
+            <h3>
+                Project alignment
+            </h3>
+
+            <p>
+
+                Technical requirements that your projects
+                demonstrate directly.
+
+            </p>
+
+
+            {% if result.project_alignment %}
+
+            <div class="project-grid">
+
+
+                {% for item in result.project_alignment %}
+
+                <div class="project-item">
+
+                    <div class="project-skill">
+
+                        ✓ {{ item.skill }}
+
+                    </div>
+
+                    <div class="project-evidence">
+
+                        {{ item.evidence }}
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+            {% else %}
+
+            <div class="empty-state">
+
+                No direct project evidence was identified
+                for the detected technical requirements.
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- =================================================
+             REQUIREMENT-BY-REQUIREMENT ANALYSIS
+        ================================================== -->
+
+        <div class="details-card">
+
+            <div class="details-card-header">
+
+                <h3>
+                    Requirement-by-requirement analysis
+                </h3>
+
+                <span>
+                    Technical evidence
+                </span>
+
+            </div>
+
+
+            <div class="requirement-list">
+
+
+                {% for item in result.requirement_details %}
+
+                <div class="requirement">
+
+
+                    <div>
+
+                        <div class="requirement-name">
+
+                            {{ item.skill }}
+
+                        </div>
+
+                        <div class="requirement-category">
+
+                            {{ item.category }}
+
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        {% if item.tier == "Core" %}
+
+                        <span class="requirement-tier tier-core">
+
+                            Core
+
+                        </span>
+
+                        {% else %}
+
+                        <span class="requirement-tier tier-supporting">
+
+                            Supporting
+
+                        </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div>
+
+                        {% if item.match_level == "Strong" %}
+
+                        <span class="match-badge match-strong">
+                            Strong
+                        </span>
+
+                        {% elif item.match_level == "Demonstrated" %}
+
+                        <span class="match-badge match-demonstrated">
+                            Demonstrated
+                        </span>
+
+                        {% elif item.match_level == "Related" %}
+
+                        <span class="match-badge match-related">
+                            Related
+                        </span>
+
+                        {% elif item.match_level == "Mentioned" %}
+
+                        <span class="match-badge match-mentioned">
+                            Mentioned
+                        </span>
+
+                        {% else %}
+
+                        <span class="match-badge match-missing">
+                            Missing
+                        </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="evidence">
+
+                        {% if item.evidence %}
+
+                            {{ item.evidence }}
+
+                        {% else %}
+
+                            No supporting technical evidence
+                            found in the resume.
+
+                        {% endif %}
+
+                    </div>
+
+
+                </div>
+
+                {% endfor %}
+
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <div class="footer">
+
+        JobMatch · Technical Compatibility Engine
+
+    </div>
+
+
+</div>
+
+</body>
+
+</html>

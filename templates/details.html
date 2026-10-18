@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>JobMatch — Analysis Details</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        :root {
+
+            --bg: #07090f;
+
+            --panel: rgba(17, 20, 31, 0.82);
+
+            --border: rgba(255, 255, 255, 0.09);
+
+            --text: #f5f7ff;
+
+            --muted: #8f96aa;
+
+            --purple: #8b5cf6;
+
+            --blue: #3b82f6;
+
+            --green: #22c55e;
+
+            --red: #ef4444;
+
+            --orange: #f59e0b;
+
+        }
+
+
+        body {
+
+            min-height: 100vh;
+
+            background:
+
+                radial-gradient(
+                    circle at 15% 10%,
+                    rgba(139, 92, 246, 0.18),
+                    transparent 28%
+                ),
+
+                radial-gradient(
+                    circle at 85% 15%,
+                    rgba(59, 130, 246, 0.15),
+                    transparent 28%
+                ),
+
+                var(--bg);
+
+            color: var(--text);
+
+            font-family:
+                Inter,
+                ui-sans-serif,
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+        }
+
+
+        .container {
+
+            width:
+                min(1100px, calc(100% - 40px));
+
+            margin: auto;
+
+            padding:
+                30px 0 80px;
+
+        }
+
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        .navbar {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 14px 18px;
+
+            background:
+                rgba(10, 12, 20, 0.72);
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 18px;
+
+            backdrop-filter:
+                blur(20px);
+
+            -webkit-backdrop-filter:
+                blur(20px);
+
+            position: sticky;
+
+            top: 18px;
+
+            z-index: 50;
+
+        }
+
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+        }
+
+
+        .brand-icon {
+
+            width: 40px;
+
+            height: 40px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 12px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--purple),
+                    var(--blue)
+                );
+
+            font-weight: 900;
+
+            box-shadow:
+                0 0 30px
+                rgba(139, 92, 246, 0.35);
+
+        }
+
+
+        .brand-text {
+
+            font-weight: 800;
+
+            font-size: 17px;
+
+        }
+
+
+        .brand-subtitle {
+
+            font-size: 11px;
+
+            color: var(--muted);
+
+            margin-top: 2px;
+
+        }
+
+
+        .nav-links {
+
+            display: flex;
+
+            gap: 8px;
+
+        }
+
+
+        .nav-links a {
+
+            color: var(--muted);
+
+            text-decoration: none;
+
+            padding:
+                9px 15px;
+
+            border-radius: 10px;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            transition: 0.2s ease;
+
+        }
+
+
+        .nav-links a:hover {
+
+            color: white;
+
+            background:
+                rgba(255,255,255,0.07);
+
+        }
+
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .hero {
+
+            padding:
+                65px 10px 35px;
+
+        }
+
+
+        .hero-badge {
+
+            display: inline-block;
+
+            padding:
+                7px 12px;
+
+            border-radius: 999px;
+
+            background:
+                rgba(139,92,246,0.08);
+
+            border:
+                1px solid
+                rgba(139,92,246,0.25);
+
+            color: #c4b5fd;
+
+            font-size: 11px;
+
+            font-weight: 750;
+
+            margin-bottom: 18px;
+
+        }
+
+
+        .hero h1 {
+
+            font-size:
+                clamp(38px, 6vw, 60px);
+
+            letter-spacing: -3px;
+
+            line-height: 1;
+
+        }
+
+
+        .gradient-text {
+
+            background:
+                linear-gradient(
+                    100deg,
+                    #ffffff,
+                    #a78bfa,
+                    #60a5fa
+                );
+
+            -webkit-background-clip: text;
+
+            background-clip: text;
+
+            color: transparent;
+
+        }
+
+
+        .hero p {
+
+            color: var(--muted);
+
+            margin-top: 15px;
+
+            font-size: 13px;
+
+        }
+
+
+        /* =========================
+           SCORE CARD
+        ========================= */
+
+        .score-card {
+
+            display: grid;
+
+            grid-template-columns:
+                280px 1fr;
+
+            gap: 35px;
+
+            padding: 30px;
+
+            border-radius: 24px;
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    rgba(139,92,246,0.13),
+                    rgba(59,130,246,0.06)
+                );
+
+            border:
+                1px solid
+                rgba(139,92,246,0.18);
+
+            box-shadow:
+                0 30px 80px
+                rgba(0,0,0,0.25);
+
+        }
+
+
+        .score-container {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+        }
+
+
+        .score-ring {
+
+            --score:
+                {{ analysis.match_percentage }}%;
+
+            width: 210px;
+
+            height: 210px;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background:
+
+                conic-gradient(
+                    from -90deg,
+                    #8b5cf6 0%,
+                    #3b82f6 var(--score),
+                    rgba(255,255,255,0.06)
+                    var(--score),
+                    rgba(255,255,255,0.06)
+                    100%
+                );
+
+            box-shadow:
+                0 0 70px
+                rgba(139,92,246,0.18);
+
+            position: relative;
+
+        }
+
+
+        .score-ring::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 168px;
+
+            height: 168px;
+
+            border-radius: 50%;
+
+            background: #0c0f18;
+
+            border:
+                1px solid
+                rgba(255,255,255,0.07);
+
+        }
+
+
+        .score-content {
+
+            position: relative;
+
+            text-align: center;
+
+        }
+
+
+        .score-number {
+
+            font-size: 42px;
+
+            font-weight: 900;
+
+            letter-spacing: -2px;
+
+        }
+
+
+        .score-caption {
+
+            color: var(--muted);
+
+            font-size: 10px;
+
+            letter-spacing: 1px;
+
+            margin-top: 3px;
+
+        }
+
+
+        .score-info {
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+        }
+
+
+        .score-info h2 {
+
+            font-size: 25px;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        .score-info p {
+
+            color: var(--muted);
+
+            font-size: 13px;
+
+            line-height: 1.7;
+
+            max-width: 600px;
+
+        }
+
+
+        .metrics {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 12px;
+
+            margin-top: 22px;
+
+        }
+
+
+        .metric {
+
+            padding: 15px;
+
+            border-radius: 14px;
+
+            background:
+                rgba(255,255,255,0.045);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.06);
+
+        }
+
+
+        .metric-value {
+
+            font-size: 21px;
+
+            font-weight: 850;
+
+        }
+
+
+        .metric-label {
+
+            color: var(--muted);
+
+            font-size: 10px;
+
+            margin-top: 4px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.5px;
+
+        }
+
+
+        /* =========================
+           SKILLS
+        ========================= */
+
+        .skill-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 18px;
+
+            margin-top: 18px;
+
+        }
+
+
+        .card {
+
+            padding: 24px;
+
+            border-radius: 20px;
+
+            background:
+                var(--panel);
+
+            border:
+                1px solid var(--border);
+
+        }
+
+
+        .card-header {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-bottom: 20px;
+
+        }
+
+
+        .card-title {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            font-weight: 800;
+
+        }
+
+
+        .count {
+
+            padding:
+                5px 9px;
+
+            border-radius: 999px;
+
+            background:
+                rgba(255,255,255,0.06);
+
+            color: var(--muted);
+
+            font-size: 10px;
+
+        }
+
+
+        .skill-list {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 8px;
+
+        }
+
+
+        .skill {
+
+            padding:
+                8px 11px;
+
+            border-radius: 9px;
+
+            font-size: 12px;
+
+            font-weight: 650;
+
+        }
+
+
+        .matched {
+
+            background:
+                rgba(34,197,94,0.09);
+
+            border:
+                1px solid
+                rgba(34,197,94,0.2);
+
+            color: #86efac;
+
+        }
+
+
+        .missing {
+
+            background:
+                rgba(239,68,68,0.08);
+
+            border:
+                1px solid
+                rgba(239,68,68,0.18);
+
+            color: #fca5a5;
+
+        }
+
+
+        .empty {
+
+            color: var(--muted);
+
+            font-size: 13px;
+
+        }
+
+
+        /* =========================
+           RECOMMENDATIONS
+        ========================= */
+
+        .recommendation-card {
+
+            margin-top: 18px;
+
+            padding: 24px;
+
+            border-radius: 20px;
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    rgba(245,158,11,0.08),
+                    rgba(139,92,246,0.05)
+                );
+
+            border:
+                1px solid
+                rgba(245,158,11,0.14);
+
+        }
+
+
+        .recommendation-card h2 {
+
+            font-size: 17px;
+
+            margin-bottom: 18px;
+
+        }
+
+
+        .recommendations {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 12px;
+
+        }
+
+
+        .recommendation {
+
+            padding: 15px;
+
+            border-radius: 13px;
+
+            background:
+                rgba(255,255,255,0.035);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.06);
+
+        }
+
+
+        .recommendation-name {
+
+            font-size: 13px;
+
+            font-weight: 750;
+
+        }
+
+
+        .priority {
+
+            display: inline-block;
+
+            margin-top: 8px;
+
+            padding:
+                4px 8px;
+
+            border-radius: 999px;
+
+            font-size: 10px;
+
+            font-weight: 800;
+
+        }
+
+
+        .priority.high {
+
+            color: #fca5a5;
+
+            background:
+                rgba(239,68,68,0.1);
+
+        }
+
+
+        .priority.medium {
+
+            color: #fcd34d;
+
+            background:
+                rgba(245,158,11,0.1);
+
+        }
+
+
+        .priority.low {
+
+            color: #86efac;
+
+            background:
+                rgba(34,197,94,0.1);
+
+        }
+
+
+        /* =========================
+           WEIGHTS
+        ========================= */
+
+        .weights {
+
+            margin-top: 18px;
+
+            padding: 24px;
+
+            border-radius: 20px;
+
+            background:
+                var(--panel);
+
+            border:
+                1px solid var(--border);
+
+        }
+
+
+        .weight-list {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 10px;
+
+        }
+
+
+        .weight-item {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            padding:
+                12px 14px;
+
+            border-radius: 11px;
+
+            background:
+                rgba(255,255,255,0.035);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.05);
+
+            font-size: 12px;
+
+        }
+
+
+        .weight-value {
+
+            color: #c4b5fd;
+
+            font-weight: 850;
+
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        .footer {
+
+            text-align: center;
+
+            color: #555d72;
+
+            font-size: 11px;
+
+            padding-top: 45px;
+
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 850px) {
+
+            .score-card {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+
+            .skill-grid {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+
+            .recommendations {
+
+                grid-template-columns:
+                    1fr 1fr;
+
+            }
+
+
+            .weight-list {
+
+                grid-template-columns:
+                    1fr 1fr;
+
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .container {
+
+                width:
+                    calc(100% - 24px);
+
+                padding-top: 12px;
+
+            }
+
+
+            .navbar {
+
+                position: relative;
+
+                top: 0;
+
+            }
+
+
+            .brand-subtitle {
+
+                display: none;
+
+            }
+
+
+            .hero {
+
+                padding:
+                    55px 5px 30px;
+
+            }
+
+
+            .hero h1 {
+
+                letter-spacing: -2px;
+
+            }
+
+
+            .score-card {
+
+                padding: 20px;
+
+            }
+
+
+            .metrics {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+
+            .recommendations,
+            .weight-list {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar">
+
+
+        <div class="brand">
+
+
+            <div class="brand-icon">
+                J
+            </div>
+
+
+            <div>
+
+                <div class="brand-text">
+                    JobMatch
+                </div>
+
+                <div class="brand-subtitle">
+                    Resume Intelligence
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="nav-links">
+
+            <a href="/">
+                Analyzer
+            </a>
+
+            <a href="/history">
+                History
+            </a>
+
+        </div>
+
+
+    </nav>
+
+
+    <!-- HEADER -->
+
+    <section class="hero">
+
+
+        <div class="hero-badge">
+
+            ANALYSIS #{{ analysis.id }}
+
+        </div>
+
+
+        <h1>
+
+            Your
+
+            <span class="gradient-text">
+                match report.
+            </span>
+
+        </h1>
+
+
+        <p>
+
+            Detailed breakdown of your resume compatibility,
+            detected skills, gaps, and weighted requirements.
+
+        </p>
+
+
+    </section>
+
+
+    <!-- SCORE -->
+
+    <section class="score-card">
+
+
+        <div class="score-container">
+
+
+            <div
+                class="score-ring"
+                style="
+                    --score:
+                    {{ analysis.match_percentage }}%;
+                "
+            >
+
+
+                <div class="score-content">
+
+
+                    <div class="score-number">
+
+                        {{ analysis.match_percentage }}%
+
+                    </div>
+
+
+                    <div class="score-caption">
+
+                        MATCH SCORE
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+        <div class="score-info">
+
+
+            <h2>
+
+                Resume compatibility
+
+            </h2>
+
+
+            <p>
+
+                This score represents the weighted percentage
+                of job requirements detected in your resume.
+                Higher-weight skills contribute more strongly
+                to the final result.
+
+            </p>
+
+
+            <div class="metrics">
+
+
+                <div class="metric">
+
+
+                    <div class="metric-value">
+
+                        {{ analysis.skill_coverage }}%
+
+                    </div>
+
+
+                    <div class="metric-label">
+
+                        Skill Coverage
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="metric">
+
+
+                    <div class="metric-value">
+
+                        {{ analysis.matched_weight }}
+
+                    </div>
+
+
+                    <div class="metric-label">
+
+                        Matched Weight
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="metric">
+
+
+                    <div class="metric-value">
+
+                        {{ analysis.total_weight }}
+
+                    </div>
+
+
+                    <div class="metric-label">
+
+                        Total Weight
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+    <!-- SKILLS -->
+
+    <section class="skill-grid">
+
+
+        <!-- MATCHED -->
+
+        <div class="card">
+
+
+            <div class="card-header">
+
+
+                <div class="card-title">
+
+                    ✓
+
+                    Matched Skills
+
+                </div>
+
+
+                <div class="count">
+
+                    {{ (analysis.matched_skills | from_json)|length }}
+
+                </div>
+
+
+            </div>
+
+
+            {% set matched =
+                analysis.matched_skills | from_json
+            %}
+
+
+            {% if matched %}
+
+
+            <div class="skill-list">
+
+
+                {% for skill in matched %}
+
+
+                <span class="skill matched">
+
+                    ✓ {{ skill }}
+
+                </span>
+
+
+                {% endfor %}
+
+
+            </div>
+
+
+            {% else %}
+
+
+            <div class="empty">
+
+                No matching skills found.
+
+            </div>
+
+
+            {% endif %}
+
+
+        </div>
+
+
+        <!-- MISSING -->
+
+        <div class="card">
+
+
+            <div class="card-header">
+
+
+                <div class="card-title">
+
+                    !
+
+                    Missing Skills
+
+                </div>
+
+
+                <div class="count">
+
+                    {{ (analysis.missing_skills | from_json)|length }}
+
+                </div>
+
+
+            </div>
+
+
+            {% set missing =
+                analysis.missing_skills | from_json
+            %}
+
+
+            {% if missing %}
+
+
+            <div class="skill-list">
+
+
+                {% for skill in missing %}
+
+
+                <span class="skill missing">
+
+                    + {{ skill }}
+
+                </span>
+
+
+                {% endfor %}
+
+
+            </div>
+
+
+            {% else %}
+
+
+            <div class="empty">
+
+                No missing skills found.
+
+            </div>
+
+
+            {% endif %}
+
+
+        </div>
+
+
+    </section>
+
+
+    <!-- RECOMMENDATIONS -->
+
+    <section class="recommendation-card">
+
+
+        <h2>
+
+            Skills worth improving
+
+        </h2>
+
+
+        {% set missing =
+            analysis.missing_skills | from_json
+        %}
+
+
+        {% if missing %}
+
+
+        <div class="recommendations">
+
+
+            {% for skill in missing %}
+
+
+            <div class="recommendation">
+
+
+                <div class="recommendation-name">
+
+                    {{ skill }}
+
+                </div>
+
+
+                <span class="priority medium">
+
+                    Improve
+
+                </span>
+
+
+            </div>
+
+
+            {% endfor %}
+
+
+        </div>
+
+
+        {% else %}
+
+
+        <div class="empty">
+
+            No additional skills recommended.
+
+        </div>
+
+
+        {% endif %}
+
+
+    </section>
+
+
+    <!-- WEIGHTS -->
+
+    <section class="weights">
+
+
+        <div class="card-header">
+
+
+            <div class="card-title">
+
+                Skill importance
+
+            </div>
+
+
+            <div class="count">
+
+                Weighted
+
+            </div>
+
+
+        </div>
+
+
+        {% set job_skills =
+            analysis.job_skills | from_json
+        %}
+
+
+        <div class="weight-list">
+
+
+            {% for skill in job_skills %}
+
+
+            <div class="weight-item">
+
+
+                <span>
+
+                    {{ skill }}
+
+                </span>
+
+
+                <span class="weight-value">
+
+                    {{ {
+                        "python": 5,
+                        "django": 4,
+                        "flask": 4,
+                        "fastapi": 4,
+                        "rest api": 4,
+                        "sql": 4,
+                        "machine learning": 3,
+                        "deep learning": 3,
+                        "nlp": 3,
+                        "pandas": 2,
+                        "numpy": 2,
+                        "scikit-learn": 3,
+                        "git": 2,
+                        "github": 1,
+                        "docker": 3,
+                        "mysql": 2,
+                        "mongodb": 2,
+                        "sqlite": 2,
+                        "html": 1,
+                        "css": 1,
+                        "javascript": 2,
+                        "java": 3,
+                        "c++": 3,
+                        "aws": 3
+                    }.get(skill, 1) }}
+
+                </span>
+
+
+            </div>
+
+
+            {% endfor %}
+
+
+        </div>
+
+
+    </section>
+
+
+    <div class="footer">
+
+        Analysis generated by JobMatch ·
+        {{ analysis.created_at }}
+
+    </div>
+
+
+</div>
+
+
+</body>
+
+</html>
