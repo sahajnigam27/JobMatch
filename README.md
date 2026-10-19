@@ -192,5 +192,4 @@ Identify missing and partially demonstrated skills, with recommendations priorit
 ### 4. Technical Skills Evidence
 
 Explore the skills identified by the analyzer and how they are categorized based on the available resume evidence.
-
 ![JobMatch Technical Skills Evidence](docs/skill-evidence.png)
