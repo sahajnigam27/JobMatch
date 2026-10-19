@@ -175,22 +175,22 @@ Built a Flask-based resume intelligence application that extracts skills and req
 
 Upload a resume and job description as PDFs or paste their text to begin the analysis.
 
-![JobMatch Homepage](docs/images/homepage.png)
+![JobMatch Homepage](docs/homepage.png)
 
 ### 2. Resume Compatibility Analysis
 
 Review the overall technical compatibility score, technical coverage, core match, and supporting match.
 
-![JobMatch Analysis Overview](docs/images/analysis-overview.png)
+![JobMatch Analysis Overview](docs/analysis-overview.png)
 
 ### 3. Skills-to-Learn Recommendations
 
 Identify missing and partially demonstrated skills, with recommendations prioritized by importance.
 
-![JobMatch Skills Recommendations](docs/images/skills-recommendations.png)
+![JobMatch Skills Recommendations](docs/skills-recommendations.png)
 
 ### 4. Technical Skills Evidence
 
 Explore the skills identified by the analyzer and how they are categorized based on the available resume evidence.
 
-![JobMatch Technical Skills Evidence](docs/images/skill-evidence.png)
+![JobMatch Technical Skills Evidence](docs/skill-evidence.png)
