@@ -187,7 +187,7 @@ Review the overall technical compatibility score, technical coverage, core match
 
 Identify missing and partially demonstrated skills, with recommendations prioritized by importance.
 
-![JobMatch Skills Recommendations](docs/skills-recommendations.png)
+![JobMatch Skills Recommendations]![JobMatch Technical Skills Evidence](./docs/skills-evidence.png)
 
 ### 4. Technical Skills Evidence
 
